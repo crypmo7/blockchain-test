@@ -35,19 +35,24 @@ pub mod chain {
     pub fn valid_chain(chain: &mut App<Block>) -> bool {
         let mut chain_valid = false;
         let mut last_hash = false;
+
         for i in 0..chain.bloks.len() {
-            if chain.bloks[i].previous_hash != "genesis".to_string()
-                && chain.bloks[i].previous_hash == chain.bloks[i - 1].hash
-            {
-                last_hash = true
+            if chain.bloks[i].id > 0 && chain.bloks[i].previous_hash == chain.bloks[i -1].hash {
+                last_hash = true;
+            } else if chain.bloks[i].id == 0 {
+                last_hash = true;
             } else {
-                last_hash = false
+                last_hash = false;
+                println!("there is a problem with last hash!")
             }
         }
+
         if chain.bloks[0].previous_hash == "genesis".to_string() && last_hash {
-            chain_valid = true
+            chain_valid = true;
+            println!("chain is valid.");
         } else {
             chain_valid = false;
+            println!("chain is not valid!");
         }
 
         chain_valid
@@ -72,6 +77,7 @@ pub mod chain {
             hasher.update(format!("{:#?}", self.bloks[0]));
             let hash_new = format!("{:X}", hasher.finalize());
             self.bloks[0].hash.push_str(&hash_new);
+            println!("genesis block created");
         }
         //---------------------------------------create-new-block---------------------------------------
         pub fn add_new_block(&mut self, data: String) {
@@ -111,7 +117,7 @@ pub mod chain {
             previous_hash: "genesis".to_string(),
             data: "genesis!".to_string(),
             nonce: 2836,
-            time: "2022-07-28 07:57:05 Utc".to_string(),
+            time: "2022-07-28 07:57:04 Utc".to_string(),
         };
         let mut hasher = Sha256::new();
         hasher.update(format!("{:#?}", test_block));
