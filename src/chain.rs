@@ -16,7 +16,7 @@ pub mod chain {
         pub time: String,
     }
 //---------------------------------------get-time---------------------------------------
-    pub fn get_time_as_string(s: &str) -> &str {
+    fn get_time_as_string(s: &str) -> &str {
         let byte = s.as_bytes();
         for (i, &item) in byte.iter().enumerate() {
             if item == b'.' {
@@ -26,24 +26,24 @@ pub mod chain {
         &s[..]
     }
 
-    pub fn time_to_string() -> String {
+    fn time_to_string() -> String {
         let new_time = Utc::now().to_string();
         let a = get_time_as_string(&new_time[..]);
         a.to_string() + " Utc"
     }
 //---------------------------------------check-valid-chain---------------------------------------
-    pub fn valid_chain(chain: &mut App<Block>) -> bool {
+    fn valid_block(chain: &mut App<Block>) -> bool {
         let mut chain_valid = false;
         let mut last_hash = false;
 
         for i in 0..chain.bloks.len() {
-            if chain.bloks[i].id > 0 && chain.bloks[i].previous_hash == chain.bloks[i -1].hash {
+            if chain.bloks[i].id > 0 && chain.bloks[i].previous_hash == chain.bloks[i -1].hash { //if previos hash is ok and app index > 0
                 last_hash = true;
-            } else if chain.bloks[i].id == 0 {
+            } else if chain.bloks[i].id == 0 { //if block number is 1 its mean is our app has 1index
                 last_hash = true;
             } else {
                 last_hash = false;
-                println!("there is a problem with last hash!")
+                println!("there is a problem with last hash!");
             }
         }
 
@@ -62,8 +62,8 @@ pub mod chain {
         pub fn new() -> Self {
             Self { bloks: vec![] }
         }
-        //---------------------------------------create-genesis-block---------------------------------------
-        pub fn genesis(&mut self) {
+
+        pub fn genesis(&mut self) { //create-genesis-block
             let genesis_block = Block {
                 id: 0,
                 previous_hash: String::from("genesis"),
@@ -79,8 +79,8 @@ pub mod chain {
             self.bloks[0].hash.push_str(&hash_new);
             println!("genesis block created");
         }
-        //---------------------------------------create-new-block---------------------------------------
-        pub fn add_new_block(&mut self, data: String) {
+
+        pub fn add_new_block(&mut self, data: String) { //create-new-block
             let latest_block = self
                 .bloks
                 .last()
@@ -99,7 +99,7 @@ pub mod chain {
                 hash: String::new(),
                 time: time_to_string(),
             };
-            if valid_chain(self) {
+            if valid_block(self) {
                 self.bloks.push(new_block);
                 let mut hasher = Sha256::new();
                 hasher.update(format!("{:#?}", self.bloks.last().unwrap().clone()));
