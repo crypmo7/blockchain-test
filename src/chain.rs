@@ -12,7 +12,7 @@ pub mod chain {
         pub hash: String,
         pub previous_hash: String,
         pub data: String,
-        pub nonce: u64,
+        // pub nonce: u64,
         pub time: String,
     }
 //---------------------------------------get-time---------------------------------------
@@ -68,7 +68,7 @@ pub mod chain {
                 id: 0,
                 previous_hash: String::from("genesis"),
                 data: String::from("genesis!"),
-                nonce: 2836,
+                // nonce: 2836,
                 hash: String::new(),
                 time: time_to_string(),
             };
@@ -95,7 +95,7 @@ pub mod chain {
                 id: last_id + 1,
                 previous_hash: last_hash,
                 data,
-                nonce: 2837,
+                // nonce: 2837,
                 hash: String::new(),
                 time: time_to_string(),
             };
@@ -116,7 +116,7 @@ pub mod chain {
             hash: String::new(),
             previous_hash: "genesis".to_string(),
             data: "genesis!".to_string(),
-            nonce: 2836,
+            // nonce: 2836,
             time: "2022-07-28 07:57:04 Utc".to_string(),
         };
         let mut hasher = Sha256::new();
